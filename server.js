@@ -1,3 +1,6 @@
+//* import database connection
+const dbConnect = require("./db");
+
 //* Initializing express package for node
 const express = require("express");
 const app = express();
@@ -9,20 +12,22 @@ require("dotenv").config();
 app.use(express.json());
 
 //* import the workout Routes
-const workoutRoutes = require("./App/Routes/workouts.js")
+const workoutRoutes = require("./App/Routes/workouts.js");
 
 //* using the workouts routes
-app.use('/api',workoutRoutes)
+app.use("/api", workoutRoutes);
 
-const start = () => {
-  const port = process.env.SERVER_PORT;
-  try {
-    app.listen(port, () => {
-      console.log(`server is running on port ${port}`);
+const start = async () => {
+  await dbConnect(process.env.MONGO_URI)
+    .then(() => {
+      app.listen(process.env.SERVER_PORT, () => {
+        console.log(
+          `server has been connected on port ${process.env.SERVER_PORT}`
+        );
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  } catch (error) {
-    console.log(err);
-  }
 };
-
 start();
