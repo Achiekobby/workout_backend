@@ -14,8 +14,14 @@ app.use(express.json());
 //* import the workout Routes
 const workoutRoutes = require("./App/Routes/workouts.js");
 
+//* import the user routers
+const userRoutes = require('./App/Routes/user')
+
 //* using the workouts routes
 app.use("/api", workoutRoutes);
+
+//* using the user routes
+app.use("/api/user", userRoutes);
 
 const start = async () => {
   await dbConnect(process.env.MONGO_URI)
